@@ -12,13 +12,12 @@ Este proyecto tiene como objetivo realizar un análisis de datos mediante consul
 1.  **Análisis de la Base de Datos:**
     *   Se estudió el esquema de la base de datos para entender las relaciones entre las tablas.
     *   Se identificaron las claves primarias y foráneas para establecer las relaciones y se comprendieron los datos disponibles en cada tabla.
-    *   El análisis de la estructura de la base de datos permitió plantear las consultas necesarias para obtener información significativa sobre los datos.
 
 2.  **Planteamiento de las Consultas SQL:**
     *   Se identificaron las necesidades del proyecto y se realizaron las consultas SQL que incluía el archivo proporcionado.
 
 3.  **Ejecución de las Consultas:**
-    *   Las consultas fueron ejecutadas utilizando **DBeaver**, una herramienta de administración de bases de datos que permite trabajar con SQL y visualizar los resultados de manera eficiente.
+    *   Las consultas fueron ejecutadas utilizando **DBeaver**.
 
 ## Tecnologías Utilizadas
 
