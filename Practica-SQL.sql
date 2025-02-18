@@ -11,7 +11,7 @@ WHERE rating = 'R';
 --3.Encuentra los nombres de los actores que tengan un “actor_idˮ entre 30 y 40.
 SELECT
 	actor_id ,
-	concat(first_name,' ',last_name) 
+	concat(first_name,' ',last_name) AS "Nombre_actor"
 FROM actor a 
 WHERE actor_id BETWEEN 30 AND 40;
 
@@ -42,7 +42,7 @@ ORDER BY length ASC;
 
 --6. Encuentra el nombre y apellido de los actores que tengan ‘Allenʼ en su apellido.
 SELECT 
-	concat(first_name, ' ', last_name) 
+	concat(first_name, ' ', last_name) AS "Nombre_actor"
 FROM actor a 
 WHERE last_name LIKE '%ALLEN%';
 
@@ -55,10 +55,6 @@ SELECT
 	f.rating,
 	count(f.title) AS total_peliculas 
 FROM film f 
-JOIN film_category fc 
-	ON f.film_id = fc.film_id 
-JOIN category c
-	ON fc.category_id = c.category_id
 GROUP BY f.rating ; 
 
 
@@ -123,14 +119,10 @@ WHERE rating NOT IN ('NC-17', 'G');
 
 --13. Encuentra el promedio de duración de las películas para cada clasificación de la tabla film y muestra la clasificación junto con el promedio de duración.
 SELECT 
-	c."name" AS "Clasificación",
+	f.rating AS "Clasificación",
 	avg(f.length) AS "Prom_Length" 
 FROM film f
-JOIN film_category fc 
-	ON f.film_id = fc.film_id
-JOIN category c 
-	ON c.category_id = fc.category_id 
-GROUP BY c."name";
+GROUP BY f.rating;
 
 
 
@@ -174,9 +166,9 @@ SELECT
 	f."title" AS "Titulo_pelicula",
 	concat(first_name, ' ',last_name) AS "Nombre_Actor" 
 FROM actor a 
-JOIN film_actor fa
+INNER JOIN film_actor fa
 	ON a.actor_id = fa.actor_id 
-JOIN film f 
+INNER JOIN film f 
 	ON fa.film_id = f.film_id 
 WHERE f.title = 'EGG IGBY';
 
@@ -199,9 +191,9 @@ SELECT
 	c."name" AS "Categoria_pelicula",
 	f."length" AS "Duracion_pelicula"
 FROM film f 
-JOIN film_category fc
+INNER JOIN film_category fc
 	ON f.film_id = fc.film_id 
-JOIN category c 
+INNER JOIN category c 
 	ON fc.category_id = c.category_id
 WHERE C."name" = 'Comedy' AND f."length" > 180; 	
 
@@ -214,9 +206,9 @@ SELECT
 	c."name" AS "Categoria_pelicula",
 	avg(f.length) AS "Prom_duracion" 
 FROM film f 
-JOIN film_category fc 
+INNER JOIN film_category fc 
 	ON f.film_id = fc.film_id 
-JOIN category c 
+INNER JOIN category c 
 	ON fc.category_id = c.category_id
 GROUP BY c."name" 
 HAVING avg(f.length) > 110;
@@ -301,11 +293,11 @@ SELECT
 	f.title AS "Titulo",
 	p.amount AS "Precio_alquiler"
 FROM payment p
-JOIN rental r 
+INNER JOIN rental r 
 	ON p.rental_id = r.rental_id 
-JOIN inventory i 
+INNER JOIN inventory i 
 	ON i.inventory_id = r.inventory_id 
-JOIN film f 
+INNER JOIN film f 
 	ON f.film_id = i.film_id 
 WHERE amount > (
 	SELECT 
@@ -402,7 +394,7 @@ SELECT
 	concat(c.first_name, ' ',c.last_name) AS "Cliente",
 	sum(p.amount) AS "Dinero_gastado"
 FROM customer c
-JOIN payment p 
+INNER JOIN payment p 
 	ON c.customer_id = p.customer_id
 GROUP BY c.customer_id, c.first_name, c.last_name
 ORDER BY "Dinero_gastado" DESC
@@ -490,7 +482,7 @@ SELECT
 	r.rental_id,
 	c.first_name AS "Cliente"
 FROM rental r 
-JOIN customer c 
+INNER JOIN customer c 
 	ON r.customer_id = c.customer_id;
 
 
@@ -527,16 +519,15 @@ LEFT JOIN rental r
 		a.first_name,
 		c."name"
 	FROM actor a 
-	JOIN film_actor fa 
+	INNER JOIN film_actor fa 
 		ON a.actor_id = fa.actor_id 
-	JOIN film f 
+	INNER JOIN film f 
 		ON f.film_id = fa.film_id
-	JOIN film_category fc 
+	INNER JOIN film_category fc 
 		ON f.film_id = fc.film_id 
-	JOIN category c 
+	INNER JOIN category c 
 		ON fc.category_id = c.category_id
-	WHERE c."name" = 'Action'	
-	GROUP BY a.first_name, c."name";
+	WHERE c."name" = 'Action';
 
 	
 
@@ -560,7 +551,7 @@ SELECT
 	a.last_name,
 	count(fa.film_id) AS "Nº_peliculas_realizadas" 
 FROM actor a
-JOIN film_actor fa 
+INNER JOIN film_actor fa 
 	ON a.actor_id = fa.actor_id 
 GROUP BY a.first_name, a.last_name;
 
@@ -575,7 +566,7 @@ SELECT
 	a.last_name,
 	count(fa.film_id) AS "Nº_peliculas_realizadas" 
 FROM actor a
-JOIN film_actor fa
+INNER JOIN film_actor fa
 	ON a.actor_id = fa.actor_id
 GROUP BY a.first_name, a.last_name;
 
@@ -603,9 +594,9 @@ SELECT
 	c."name",
 	sum(f.length) AS "Duracion" 
 FROM film f
-JOIN film_category fc 
+INNER JOIN film_category fc 
 	ON f.film_id = fc.film_id 
-JOIN category c
+INNER JOIN category c
 	ON fc.category_id = c.category_id
 WHERE c."name" = 'Action'
 GROUP BY c."name";
@@ -648,9 +639,9 @@ SELECT
 	f.title AS "Titulo_pelicula",
 	count(r.rental_id) AS "Nº_veces_alquiler" 
 FROM film f
-JOIN inventory i
+INNER JOIN inventory i
 	ON f.film_id = i.film_id
-JOIN rental r 
+INNER JOIN rental r 
 	ON i.inventory_id = r.inventory_id
 GROUP BY f.film_id, f.title
 HAVING count(r.rental_id) >= 10
@@ -662,11 +653,11 @@ ORDER BY "Nº_veces_alquiler" DESC;
 SELECT
 	f.title
 FROM film f 
-JOIN inventory i 
+INNER JOIN inventory i 
 	ON f.film_id = i.film_id
-JOIN rental r 
+INNER JOIN rental r 
 	ON r.inventory_id = i.inventory_id 
-JOIN customer c
+INNER JOIN customer c
 	ON c.customer_id = r.customer_id
 WHERE c.first_name = 'TAMMY' 
 AND c.last_name = 'SANDERS' 
@@ -680,13 +671,13 @@ SELECT DISTINCT
 	a.first_name,
 	a.last_name
 FROM category c 
-JOIN film_category fc 
+INNER JOIN film_category fc 
 	ON c.category_id = fc.category_id 
-JOIN film f 
+INNER JOIN film f 
 	ON fc.film_id = f.film_id 
-JOIN film_actor fa 
+INNER JOIN film_actor fa 
 	ON fa.film_id = f.film_id 
-JOIN actor a
+INNER JOIN actor a
 	ON a.actor_id = fa.actor_id
 WHERE c.name = 'Sci-Fi'
 ORDER BY a.last_name;
@@ -699,20 +690,20 @@ SELECT
 	a.first_name,
 	a.last_name 
 FROM actor a 
-JOIN film_actor fa
+INNER JOIN film_actor fa
 	ON a.actor_id = fa.actor_id 
-JOIN film f
+INNER JOIN film f
 	ON f.film_id = fa.film_id
-JOIN inventory i
+INNER JOIN inventory i
 	ON i.film_id = f.film_id
-JOIN rental r
+INNER JOIN rental r
 	ON r.inventory_id = i.inventory_id
 WHERE r.rental_date > (
 	SELECT min(r.rental_date)
 	FROM rental r
-	JOIN inventory i
+	INNER JOIN inventory i
 		ON r.inventory_id = i.inventory_id
-	JOIN film f
+	INNER JOIN film f
 		ON i.film_id = f.film_id
 	WHERE f.title = 'SPARTACUS CHEAPER'
 )
@@ -723,26 +714,18 @@ ORDER BY a.last_name;
 
 --56. Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría ‘Musicʼ.
 SELECT DISTINCT
-	a.first_name,
-	a.last_name
-FROM category c 
-JOIN film_category fc 
-	ON c.category_id = fc.category_id 
-JOIN film f 
-	ON fc.film_id = f.film_id 
-JOIN film_actor fa 
-	ON fa.film_id = f.film_id 
-JOIN actor a
-	ON a.actor_id = fa.actor_id
-WHERE a.actor_id NOT IN(
+	a2.first_name,
+	a2.last_name
+FROM actor a2 
+WHERE a2.actor_id NOT IN(
 	SELECT DISTINCT fa.actor_id
 	FROM film_actor fa
-	JOIN film_category fc
+	INNER JOIN film_category fc
 		ON fc.film_id = fa.film_id
-	JOIN category c
+	INNER JOIN category c
 		ON c.category_id = fc.category_id
-	WHERE c.name = 'MUSIC';
-) 
+	WHERE c.name LIKE 'MUSIC'
+);
 
 
 
@@ -751,9 +734,9 @@ WHERE a.actor_id NOT IN(
 SELECT
 	f.title
 FROM film f
-JOIN inventory i
+INNER JOIN inventory i
 	ON f.film_id = i.film_id
-JOIN rental r
+INNER JOIN rental r
 	ON r.inventory_id  = i.inventory_id
 WHERE r.return_date IS NOT NULL 
 AND EXTRACT(DAY FROM r.return_date - r.rental_date) > 8;
@@ -765,9 +748,9 @@ AND EXTRACT(DAY FROM r.return_date - r.rental_date) > 8;
 SELECT
 	f.title
 FROM film f
-JOIN film_category fc 
+INNER JOIN film_category fc 
 	ON fc.film_id = f.film_id
-JOIN category c
+INNER JOIN category c
 	ON c.category_id = fc.category_id
 WHERE c.name = 'Animation';
 
@@ -794,9 +777,9 @@ SELECT
 	c.first_name, 
 	c.last_name 
 FROM customer c
-JOIN rental r
+INNER JOIN rental r
 	ON r.customer_id = c.customer_id
-JOIN inventory i
+INNER JOIN inventory i
 	ON i.inventory_id = r.inventory_id 
 GROUP BY c.customer_id
 HAVING count(DISTINCT i.film_id) >= 7
@@ -810,13 +793,13 @@ SELECT
 	c."name",
 	count(*) AS "Nº_alquileres" 
 FROM category c
-JOIN film_category fc
+INNER JOIN film_category fc
 	ON c.category_id = fc.category_id
-JOIN film f
+INNER JOIN film f
 	ON fc.film_id = f.film_id
-JOIN inventory i 
+INNER JOIN inventory i 
 	ON f.film_id = i.film_id
-JOIN rental r
+INNER JOIN rental r
 	ON i.inventory_id = r.inventory_id
 GROUP BY c."name";
 
@@ -829,9 +812,9 @@ SELECT
 	c.name,
 	count(f.film_id) AS "Nº_peliculas" 
 FROM film f
-JOIN film_category fc
+INNER JOIN film_category fc
 	ON f.film_id = fc.film_id 
-JOIN category c
+INNER JOIN category c
 	ON c.category_id = fc.category_id 
 WHERE f.release_year = 2006
 GROUP BY c.name;
@@ -853,7 +836,7 @@ SELECT
 	c.last_name,
 	count(r.rental_id) AS "Cantidad_alquileres"
 FROM customer c
-JOIN rental r
+INNER JOIN rental r
 	ON c.customer_id = r.customer_id
 GROUP BY c.customer_id, c.first_name, c.last_name;
 
