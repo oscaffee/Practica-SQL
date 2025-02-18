@@ -21,9 +21,12 @@ Este proyecto tiene como objetivo realizar un análisis de datos mediante consul
    Las consultas fueron ejecutadas utilizando **DBeaver**, una herramienta de administración de bases de datos que permite trabajar con SQL y visualizar los resultados de manera eficiente.
 
    Tecnologías Utilizadas
-SQL: Lenguaje utilizado para escribir las consultas y realizar el análisis de los datos.
-DBeaver: Herramienta utilizada para gestionar la base de datos, escribir las consultas y visualizar los resultados.
-Base de datos proporcionada: Contiene las tablas necesarias para realizar las consultas y obtener los datos relevantes para el análisis.
-Enlace al Repositorio
+   ## Tecnologías Utilizadas
+
+En este proyecto se utilizaron las siguientes tecnologías:
+
+   -Lenguaje de Consulta de Datos: SQL
+   -Gestor de Bases de Datos: DBeaver
+   -Base de Datos: Peliculas
 
 Puedes encontrar este proyecto en mi repositorio de GitHub: https://github.com/oscaffee?tab=repositories
